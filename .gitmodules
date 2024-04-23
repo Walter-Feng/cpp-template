@@ -7,5 +7,5 @@
 	url = https://github.com/Taywee/args.git
 
 [submodule "external/json"]
-    path = external/json
-    url = https://github.com/nlohmann/json.git
+	path = external/json
+	url = https://github.com/nlohmann/json.git

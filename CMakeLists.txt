@@ -48,9 +48,10 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_definitions(-DTEMPLATE_ROOT=\"${CMAKE_CURRENT_SOURCE_DIR}\")
 
-# TODO: add source code file to library; rename
+set(CMAKE_STATIC_LIBRARY_PREFIX "")
+# TODO: Rename
 add_library(libTemplate
-
+        src/util/util.cpp
 )
 
 #TODO: Rename
@@ -70,10 +71,10 @@ find_package(
 )
 
 if (${HDF5_FOUND})
-    message("Found HDF5 Library,")
-    message("HDF5_VERSION: " ${HDF5_VERSION})
-    message("HDF5_LIBRARIES   : " ${HDF5_LIBRARIES})
-    message("HDF5_INCLUDE_DIRS: " ${HDF5_INCLUDE_DIRS})
+    message(STATUS "Found HDF5 Library,")
+    message(STATUS "HDF5_VERSION: " ${HDF5_VERSION})
+    message(STATUS "HDF5_LIBRARIES   : " ${HDF5_LIBRARIES})
+    message(STATUS "HDF5_INCLUDE_DIRS: " ${HDF5_INCLUDE_DIRS})
 
     include_directories(SYSTEM ${HDF5_INCLUDE_DIRS})
     target_link_libraries(libTemplate ${HDF5_LIBRARIES})
@@ -103,12 +104,10 @@ target_link_libraries(libTemplate Catch2WithMain)
 add_subdirectory(external/args)
 include_directories("external/args")
 target_link_libraries(libTemplate args)
-add_definitions(-DHAVE_ARGS)
 
 #########json#########
 add_subdirectory(external/json)
-include_directories("external/json")
-target_include_directories(libTemplate PUBLIC external/nlohmann/)
+include_directories("external/json/include")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -119,6 +118,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 
+# TODO: Rename
 add_executable(test_template
-        src/basis/basis_unit_test.cpp
+        src/util/util_test.cpp
 )
+
+target_link_libraries(test_template libTemplate)
