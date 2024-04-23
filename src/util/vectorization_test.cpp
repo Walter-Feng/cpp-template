@@ -1,6 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 
-#include "util.h"
+#include "vectorization.h"
 
 struct TemplateStruct {
   int a;
@@ -15,8 +15,7 @@ TEST_CASE("Check to_vector concept") {
 
   const TemplateStruct test_object{1, 0};
 
-  const auto vectorized_object =
-      cpp_template::util::to_vector<int, TemplateStruct>(test_object);
+  const auto vectorized_object = cpp_template::util::to_vector(test_object);
 
   CHECK(vectorized_object.size() == 2);
   CHECK(vectorized_object[0] == 1);

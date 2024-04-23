@@ -76,7 +76,7 @@ if (${HDF5_FOUND})
     message(STATUS "HDF5_LIBRARIES   : " ${HDF5_LIBRARIES})
     message(STATUS "HDF5_INCLUDE_DIRS: " ${HDF5_INCLUDE_DIRS})
 
-    include_directories(SYSTEM ${HDF5_INCLUDE_DIRS})
+    include_directories(${HDF5_INCLUDE_DIRS})
     target_link_libraries(libTemplate ${HDF5_LIBRARIES})
 endif ()
 
@@ -120,7 +120,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 
 # TODO: Rename
 add_executable(test_template
-        src/util/util_test.cpp
+        src/util/vectorization_test.cpp
 )
 
 target_link_libraries(test_template libTemplate)
