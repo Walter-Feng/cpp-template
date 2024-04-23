@@ -1,5 +1,5 @@
-#ifndef CPPTEMPLATE_ERROR_H
-#define CPPTEMPLATE_ERROR_H
+#ifndef CPPTEMPLATE_UTIL_ERROR_H
+#define CPPTEMPLATE_UTIL_ERROR_H
 
 #include <string>
 #include <cassert>
@@ -23,4 +23,4 @@ void Warning(const std::string & warning_message) {
 
 }
 
-#endif //CPPTEMPLATE_ERROR_H
+#endif //CPPTEMPLATE_UTIL_ERROR_H

@@ -6,8 +6,6 @@
 
 #include "version.h"
 
-#include "util/util.h"
-
 int main(const int argc, const char * argv[]) {
 
   args::ArgumentParser parser(
@@ -23,8 +21,7 @@ int main(const int argc, const char * argv[]) {
   args::ValueFlag<std::string> str_input(parser, "string",
                                          "String form of json input", {'s'});
 
-  args::ValueFlag<bool> version_flag(parser, "version", "Check the version",
-                                     {'v'});
+  args::Flag version_flag(parser, "version", "Check the version", {'v'});
 
   /////////////// Error Handling ///////////////
   try {
