@@ -4,9 +4,14 @@
 #include <args.hxx>
 #include <nlohmann/json.hpp>
 
+#include <boost/mpi.hpp>
+
 #include "version.h"
 
-int main(const int argc, const char * argv[]) {
+int main(int argc, char * argv[]) {
+
+  boost::mpi::environment environment(argc, argv);
+  boost::mpi::communicator communicator;
 
   args::ArgumentParser parser(
       "This is the executable of a C++ template program "

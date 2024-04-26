@@ -75,6 +75,16 @@ if (${MPI_FOUND})
     target_link_libraries(libTemplate ${MPI_LIBRARIES})
 endif ()
 
+#####Boost#####
+find_package(
+        Boost
+        REQUIRED
+        COMPONENTS mpi serialization
+)
+if(${Boost_FOUND})
+    include_directories(${Boost_INCLUDE_DIRS})
+    target_link_libraries(libTemplate ${Boost_LIBRARIES})
+endif()
 
 #####HDF5######
 
