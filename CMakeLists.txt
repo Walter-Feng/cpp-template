@@ -15,20 +15,20 @@ set(PROJECT_VERSION 1.0.0)
 project(cpptemplate VERSION ${PROJECT_VERSION}
         DESCRIPTION "A generic template for C++ projects")
 
-IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
+IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
     FIND_PACKAGE(Git)
-    IF(GIT_FOUND)
+    IF (GIT_FOUND)
         EXECUTE_PROCESS(
                 COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                 OUTPUT_VARIABLE "TEMPLATE_BUILD_VERSION"
                 ERROR_QUIET
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-        MESSAGE( STATUS "Git version: ${TEMPLATE_BUILD_VERSION}" )
-    ELSE(GIT_FOUND)
+        MESSAGE(STATUS "Git version: ${TEMPLATE_BUILD_VERSION}")
+    ELSE (GIT_FOUND)
         SET(TEMPLATE_BUILD_VERSION PROJECT_VERSION)
-    ENDIF(GIT_FOUND)
-ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
+    ENDIF (GIT_FOUND)
+ENDIF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
 
 CONFIGURE_FILE(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/version/version.h.in
@@ -63,6 +63,18 @@ target_link_libraries(template libTemplate)
 ####################
 #  find Libraries  #
 ####################
+
+#####MPI######
+find_package(
+        MPI
+        REQUIRED
+)
+
+if (${MPI_FOUND})
+    include_directories(${MPI_INCLUDE_DIRS})
+    target_link_libraries(libTemplate ${MPI_LIBRARIES})
+endif ()
+
 
 #####HDF5######
 
