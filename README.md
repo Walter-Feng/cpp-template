@@ -8,7 +8,7 @@ The repository gives examples for the following:
 1. CMake
 2. Using submodules (Catch2, args, json)
 3. Finding library (HDF5 but not required to compile)
-4. Enabling OpenMP 
+4. Enabling OpenMP (but not required)
 5. Git versioning (i.e. automatic versioning by git hash)
 6. Creating a library
 7. Creating an executable
@@ -22,6 +22,9 @@ This can be used as a template for your next C++ project, so that you don't need
 to copy the same snippets again. Make sure to change the name to your own project -
 you will be replacing `TEMPLATE / Template / template` names except the 
 actual `template` keyword for C++ in `src/util/vectorization.h`.
+
+You can also checkout to other branches to see C++ template with modules. For 
+example, you can checkout to `mpi` to have an MPI-C++ template.
 
 To compile, you will be doing:
 1. clone the repository with all the submodules
