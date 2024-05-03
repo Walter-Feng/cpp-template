@@ -1,5 +1,5 @@
-#ifndef CPPTEMPLATE_UTIL_VECTORIZATION_H
-#define CPPTEMPLATE_UTIL_VECTORIZATION_H
+#ifndef CPP_TEMPLATE_UTIL_VECTORIZATION_H
+#define CPP_TEMPLATE_UTIL_VECTORIZATION_H
 
 
 #include <iostream>
@@ -30,4 +30,4 @@ Indexable auto to_vector(const Vectorizable auto & object) {
 
 }
 
-#endif //CPPTEMPLATE_UTIL_VECTORIZATION_H
+#endif //CPP_TEMPLATE_UTIL_VECTORIZATION_H

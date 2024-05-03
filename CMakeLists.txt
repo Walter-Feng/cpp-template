@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.27)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -12,23 +12,25 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(PROJECT_VERSION 1.0.0)
 
 ### TODO: replace the project name ###
-project(cpptemplate VERSION ${PROJECT_VERSION}
+project(cpptemplate
+        VERSION ${PROJECT_VERSION}
+        LANGUAGES CXX CUDA
         DESCRIPTION "A generic template for C++ projects")
 
-IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
+IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
     FIND_PACKAGE(Git)
-    IF(GIT_FOUND)
+    IF (GIT_FOUND)
         EXECUTE_PROCESS(
                 COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                 OUTPUT_VARIABLE "TEMPLATE_BUILD_VERSION"
                 ERROR_QUIET
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-        MESSAGE( STATUS "Git version: ${TEMPLATE_BUILD_VERSION}" )
-    ELSE(GIT_FOUND)
+        MESSAGE(STATUS "Git version: ${TEMPLATE_BUILD_VERSION}")
+    ELSE (GIT_FOUND)
         SET(TEMPLATE_BUILD_VERSION PROJECT_VERSION)
-    ENDIF(GIT_FOUND)
-ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
+    ENDIF (GIT_FOUND)
+ENDIF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
 
 CONFIGURE_FILE(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/version/version.h.in
@@ -45,6 +47,7 @@ enable_testing()
 
 # Change the standard to your need if necessary
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CUDA_STANDARD 20)
 
 add_definitions(-DTEMPLATE_ROOT=\"${CMAKE_CURRENT_SOURCE_DIR}\")
 
@@ -90,6 +93,14 @@ if (OPENMP_FOUND)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif ()
 
+
+######CUDA######
+set(CMAKE_CUDA_ARCHITECTURES 80)
+
+find_package(CUDAToolkit REQUIRED)
+target_link_libraries(libTemplate CUDA::cublas CUDA::cudart)
+
+
 ################################
 #  Compile external libraries  #
 ################################
@@ -121,6 +132,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 # TODO: Rename
 add_executable(test_template
         src/util/vectorization_test.cpp
+        src/util/print_test.cu
 )
 
 target_link_libraries(test_template libTemplate)
