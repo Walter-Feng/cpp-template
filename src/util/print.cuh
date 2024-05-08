@@ -18,6 +18,8 @@ void print_cuda(const T * src, const size_t total_length,
   for(const auto element : converted) {
     std::cout << element << " ";
   }
+
+  std::cout << std::endl;
 }
 }
 
