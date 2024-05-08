@@ -3,5 +3,6 @@
 
 #include "vectorization.h"
 #include "error.h"
+#include "print.cuh"
 
 #endif //CPP_TEMPLATE_UTIL_H

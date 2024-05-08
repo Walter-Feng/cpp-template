@@ -12,7 +12,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(PROJECT_VERSION 1.0.0)
 
 ### TODO: replace the project name ###
-project(cpptemplate VERSION ${PROJECT_VERSION}
+project(cpptemplate
+        VERSION ${PROJECT_VERSION}
+        LANGUAGES CXX CUDA
         DESCRIPTION "A generic template for C++ projects")
 
 IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
@@ -45,6 +47,7 @@ enable_testing()
 
 # Change the standard to your need if necessary
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CUDA_STANDARD 20)
 
 add_definitions(-DTEMPLATE_ROOT=\"${CMAKE_CURRENT_SOURCE_DIR}\")
 
@@ -112,6 +115,14 @@ if (OPENMP_FOUND)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif ()
 
+
+######CUDA######
+set(CMAKE_CUDA_ARCHITECTURES 80)
+
+find_package(CUDAToolkit REQUIRED)
+target_link_libraries(libTemplate CUDA::cublas CUDA::cudart)
+
+
 ################################
 #  Compile external libraries  #
 ################################
@@ -143,6 +154,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 # TODO: Rename
 add_executable(test_template
         src/util/vectorization_test.cpp
+        src/util/print_test.cu
 )
 
 target_link_libraries(test_template libTemplate)
