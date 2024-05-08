@@ -4,6 +4,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif ()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
@@ -55,6 +57,7 @@ set(CMAKE_STATIC_LIBRARY_PREFIX "")
 # TODO: Rename
 add_library(libTemplate
         src/util/util.cpp
+        src/util/nccl.cpp
 )
 
 #TODO: Rename
@@ -84,10 +87,10 @@ find_package(
         REQUIRED
         COMPONENTS mpi serialization
 )
-if(${Boost_FOUND})
+if (${Boost_FOUND})
     include_directories(${Boost_INCLUDE_DIRS})
     target_link_libraries(libTemplate ${Boost_LIBRARIES})
-endif()
+endif ()
 
 #####HDF5######
 
@@ -109,7 +112,7 @@ endif ()
 
 FIND_PACKAGE(OpenMP)
 
-if (OPENMP_FOUND)
+if (${OPENMP_FOUND})
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
@@ -121,6 +124,13 @@ set(CMAKE_CUDA_ARCHITECTURES 80)
 
 find_package(CUDAToolkit REQUIRED)
 target_link_libraries(libTemplate CUDA::cublas CUDA::cudart)
+
+#########nccl#########
+find_package(NCCL REQUIRED)
+if (${NCCL_FOUND})
+    include_directories(${NCCL_INCLUDE_DIRS})
+    target_link_libraries(libTemplate ${NCCL_LIBRARIES})
+endif ()
 
 
 ################################
@@ -143,7 +153,6 @@ add_subdirectory(external/json)
 include_directories("external/json/include")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 
 ####################
 #       Test       #

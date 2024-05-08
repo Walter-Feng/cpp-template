@@ -5,10 +5,18 @@
 #include <nlohmann/json.hpp>
 
 #include <boost/mpi.hpp>
+#include <nccl.h>
 
 #include "version.h"
+#include "util/util.h"
+
 
 int main(int argc, char * argv[]) {
+  int n_devices;
+  cudaGetDeviceCount(&n_devices);
+
+  std::vector<ncclComm_t> nccl_communicators(n_devices);
+  util::nccl::ncclCommInitAll(nccl_communicators.data(), n_devices);
 
   boost::mpi::environment environment(argc, argv);
   boost::mpi::communicator communicator;
