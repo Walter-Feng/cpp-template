@@ -4,6 +4,6 @@
 #include "vectorization.h"
 #include "error.h"
 #include "print.cuh"
-#include "nccl.h"
+#include "check.h"
 
 #endif //CPP_TEMPLATE_UTIL_H

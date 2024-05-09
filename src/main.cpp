@@ -12,14 +12,42 @@
 
 
 int main(int argc, char * argv[]) {
-  int n_devices;
-  cudaGetDeviceCount(&n_devices);
-
-  std::vector<ncclComm_t> nccl_communicators(n_devices);
-  util::nccl::ncclCommInitAll(nccl_communicators.data(), n_devices);
 
   boost::mpi::environment environment(argc, argv);
   boost::mpi::communicator communicator;
+
+  std::vector<std::string> host_names;
+  const auto local_host_name = environment.processor_name();
+  boost::mpi::all_gather(communicator, local_host_name, host_names);
+
+  const size_t host_index = std::find(host_names.begin(), host_names.end(),
+                                      local_host_name) - host_names.begin();
+
+  assert(host_index < host_names.size());
+  const auto local_communicator = communicator.split(host_index);
+
+  int n_devices;
+  CUDACHECK(cudaGetDeviceCount(&n_devices));
+
+  if (local_communicator.size() > n_devices) {
+    throw cpp_template::Error(
+        "the size of local threads exceeds allocable GPU devices");
+  }
+
+  ncclUniqueId unique_id;
+  if (environment.is_main_thread()) {
+    ncclGetUniqueId(&unique_id);
+  }
+
+  boost::mpi::broadcast(communicator, unique_id.internal,
+                        environment.host_rank().get_value_or(0));
+
+  CUDACHECK(cudaSetDevice(local_communicator.rank()));
+
+  ncclComm_t nccl_communicator;
+  NCCLCHECK(
+      ncclCommInitRank(&nccl_communicator, local_communicator.size(), unique_id,
+                       local_communicator.rank()));
 
   args::ArgumentParser parser(
       "This is the executable of a C++ template program "

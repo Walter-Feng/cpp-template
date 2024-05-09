@@ -57,7 +57,6 @@ set(CMAKE_STATIC_LIBRARY_PREFIX "")
 # TODO: Rename
 add_library(libTemplate
         src/util/util.cpp
-        src/util/nccl.cpp
 )
 
 #TODO: Rename
