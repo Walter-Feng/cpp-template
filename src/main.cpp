@@ -17,14 +17,15 @@ int main(int argc, char * argv[]) {
   boost::mpi::communicator communicator;
 
   std::vector<std::string> host_names;
-  const auto local_host_name = environment.processor_name();
+  const auto local_host_name = boost::mpi::environment::processor_name();
   boost::mpi::all_gather(communicator, local_host_name, host_names);
 
   const size_t host_index = std::find(host_names.begin(), host_names.end(),
                                       local_host_name) - host_names.begin();
 
   assert(host_index < host_names.size());
-  const auto local_communicator = communicator.split(host_index);
+  const auto local_communicator = communicator.split(
+      static_cast<int>(host_index));
 
   int n_devices;
   CUDACHECK(cudaGetDeviceCount(&n_devices));
@@ -35,12 +36,12 @@ int main(int argc, char * argv[]) {
   }
 
   ncclUniqueId unique_id;
-  if (environment.is_main_thread()) {
+  if (boost::mpi::environment::is_main_thread()) {
     ncclGetUniqueId(&unique_id);
   }
 
   boost::mpi::broadcast(communicator, unique_id.internal,
-                        environment.host_rank().get_value_or(0));
+                        boost::mpi::environment::host_rank().get_value_or(0));
 
   CUDACHECK(cudaSetDevice(local_communicator.rank()));
 

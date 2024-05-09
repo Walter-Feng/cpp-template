@@ -18,7 +18,7 @@ struct Error : public std::runtime_error {
 
 inline
 void Warning(const std::string & warning_message) {
-  std::cout << "Warning: " + warning_message;
+  std::cout << "Warning: " + warning_message << std::endl;
 }
 
 }
